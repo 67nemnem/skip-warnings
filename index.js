@@ -80,14 +80,14 @@ function decode(buf) {
 }
 
 app.get("/", (_, res) => res.send(`<body style="font:18px sans-serif;padding:30px"><h2>Skip Warnings add-on</h2>
-<p>Install in Stremio with: <b>this address${process.env.VERCEL ? "/api" : ""}/manifest.json</b></p>`));
+<p>Install in Stremio with: <b>this address/manifest.json</b></p>`));
 
 app.get("/manifest.json", (_, res) => res.json(manifest));
 
 app.get(["/subtitles/:type/:id.json", "/subtitles/:type/:id/:extra.json"], async (req, res) => {
   const id = req.params.id;
   if (!rangesFor(id)) return res.json({ subtitles: [] });
-  const host = `${req.protocol}://${req.get("host")}${process.env.VERCEL ? "/api" : ""}`;
+  const host = `${req.protocol}://${req.get("host")}`;
   const out = [{ id: "skipwarn-" + id, lang: "Skip Warnings only", url: `${host}/sub/${encodeURIComponent(id)}.srt` }];
   try {
     const x = req.params.extra ? "/" + req.params.extra : "";
